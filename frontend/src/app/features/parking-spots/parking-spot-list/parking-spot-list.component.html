@@ -1,0 +1,172 @@
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Vagas de Estacionamento</h1>
+            <p class="mt-1 text-sm text-gray-600">Gerencie as vagas do estacionamento</p>
+        </div>
+        <button (click)="openModal()"
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Nova Vaga
+        </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="bg-white rounded-lg shadow-sm p-4">
+        <div class="relative">
+            <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterSpots()"
+                placeholder="Buscar por código, tipo ou status..."
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+            <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <svg class="animate-spin h-12 w-12 text-primary-600" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+        </svg>
+    </div>
+
+    <!-- Spots Grid -->
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div *ngFor="let spot of filteredSpots"
+            class="bg-white rounded-lg shadow-sm border-2 hover:shadow-md transition-shadow p-4"
+            [class.border-success-300]="spot.status === 'FREE'" [class.border-danger-300]="spot.status === 'OCCUPIED'"
+            [class.border-warning-300]="spot.status === 'RESERVED'" [class.border-gray-300]="spot.status === 'BLOCKED'">
+
+            <!-- Spot Code -->
+            <div class="flex justify-between items-start mb-3">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900">{{ spot.code }}</h3>
+                    <p class="text-sm text-gray-600">{{ getTypeLabel(spot.type) }}</p>
+                </div>
+                <span class="px-2 py-1 text-xs font-semibold rounded-full" [ngClass]="getStatusClass(spot.status)">
+                    {{ getStatusLabel(spot.status) }}
+                </span>
+            </div>
+
+            <!-- Spot Details -->
+            <div class="space-y-2 mb-4">
+                <div class="flex items-center text-sm text-gray-600">
+                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                        </path>
+                    </svg>
+                    {{ spot.covered ? 'Coberta' : 'Descoberta' }}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex space-x-2">
+                <button (click)="openModal(spot)"
+                    class="flex-1 px-3 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 transition-colors">
+                    Editar
+                </button>
+                <button (click)="deleteSpot(spot.id!)"
+                    class="flex-1 px-3 py-2 text-sm font-medium text-danger-700 bg-danger-50 rounded-lg hover:bg-danger-100 transition-colors">
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && filteredSpots.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+            </path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhuma vaga encontrada</h3>
+        <p class="mt-1 text-sm text-gray-500">Comece criando uma nova vaga.</p>
+    </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50"
+    (click)="closeModal()">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white"
+        (click)="$event.stopPropagation()">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-900">
+                {{ isEditing ? 'Editar Vaga' : 'Nova Vaga' }}
+            </h3>
+            <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <form [formGroup]="spotForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <!-- Code -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Código da Vaga</label>
+                <input type="text" formControlName="code" placeholder="Ex: A01"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent uppercase"
+                    [class.border-danger-500]="spotForm.get('code')?.invalid && spotForm.get('code')?.touched">
+                <p *ngIf="spotForm.get('code')?.invalid && spotForm.get('code')?.touched"
+                    class="mt-1 text-sm text-danger-600">
+                    Código inválido (formato: A01, B12, etc.)
+                </p>
+            </div>
+
+            <!-- Type -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Veículo</label>
+                <select formControlName="type"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option [value]="VehicleType.CAR">Carro</option>
+                    <option [value]="VehicleType.MOTORCYCLE">Moto</option>
+                    <option [value]="VehicleType.TRUCK">Caminhão</option>
+                </select>
+            </div>
+
+            <!-- Status -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select formControlName="status"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option [value]="SpotStatus.FREE">Livre</option>
+                    <option [value]="SpotStatus.OCCUPIED">Ocupada</option>
+                    <option [value]="SpotStatus.RESERVED">Reservada</option>
+                    <option [value]="SpotStatus.BLOCKED">Bloqueada</option>
+                </select>
+            </div>
+
+            <!-- Covered -->
+            <div class="flex items-center">
+                <input type="checkbox" formControlName="covered" id="covered"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                <label for="covered" class="ml-2 block text-sm text-gray-700">
+                    Vaga coberta
+                </label>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex space-x-3 pt-4">
+                <button type="button" (click)="closeModal()"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </button>
+                <button type="submit" [disabled]="spotForm.invalid"
+                    class="flex-1 px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                    {{ isEditing ? 'Atualizar' : 'Criar' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

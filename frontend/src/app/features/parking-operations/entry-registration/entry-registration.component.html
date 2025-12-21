@@ -1,0 +1,62 @@
+<div class="max-w-2xl mx-auto space-y-6">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">Registrar Entrada</h1>
+
+        <!-- Search Section -->
+        <div class="space-y-4">
+            <label class="block text-sm font-medium text-gray-700">Placa do Veículo</label>
+            <div class="flex gap-4">
+                <input type="text" [(ngModel)]="searchPlate" (keyup.enter)="searchVehicle()" placeholder="ABC-1234"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent uppercase">
+                <button (click)="searchVehicle()" [disabled]="loading"
+                    class="btn-primary px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:opacity-50">
+                    {{ loading ? 'Buscando...' : 'Buscar' }}
+                </button>
+            </div>
+            <p *ngIf="error" class="text-danger-600 text-sm">{{ error }}</p>
+        </div>
+
+        <!-- Vehicle Found Section -->
+        <div *ngIf="vehicle" class="mt-8 border-t pt-6 space-y-6">
+            <div class="bg-gray-50 rounded-lg p-4 grid grid-cols-2 gap-4">
+                <div>
+                    <span class="block text-sm text-gray-500">Modelo</span>
+                    <span class="block font-medium text-gray-900">{{ vehicle.model }}</span>
+                </div>
+                <div>
+                    <span class="block text-sm text-gray-500">Cor</span>
+                    <span class="block font-medium text-gray-900">{{ vehicle.color }}</span>
+                </div>
+                <div>
+                    <span class="block text-sm text-gray-500">Tipo</span>
+                    <span class="block font-medium text-gray-900">{{ vehicle.type }}</span>
+                </div>
+                <div>
+                    <span class="block text-sm text-gray-500">Proprietário</span>
+                    <span class="block font-medium text-gray-900">{{ vehicle.owner?.name || 'N/A' }}</span>
+                </div>
+            </div>
+
+            <!-- Spot Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Selecione uma Vaga</label>
+                <select [(ngModel)]="selectedSpotId"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option value="" disabled selected>Escolha uma vaga...</option>
+                    <option *ngFor="let spot of availableSpots" [value]="spot.id">
+                        {{ spot.code }} ({{ spot.covered ? 'Coberta' : 'Descoberta' }})
+                    </option>
+                </select>
+                <p *ngIf="availableSpots.length === 0" class="mt-2 text-sm text-warning-600">
+                    Nenhuma vaga disponível para este tipo de veículo.
+                </p>
+            </div>
+
+            <!-- Action -->
+            <button (click)="registerEntry()" [disabled]="!selectedSpotId || loading"
+                class="w-full btn-primary py-3 bg-success-600 hover:bg-success-700 text-white font-medium rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                Confirmar Entrada
+            </button>
+        </div>
+    </div>
+</div>

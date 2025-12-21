@@ -1,0 +1,48 @@
+package com.bill.parking_control.persistences.entities;
+
+import java.time.Instant;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Document(collection = "reservations")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Reservation {
+    @Id
+    private String id;
+
+    @DBRef
+    private Client client;
+    @DBRef
+    private ParkingSpot spot;
+
+    private Instant reservedFrom;
+    private Instant reservedUntil;
+
+    @Builder.Default
+    private ReservationStatus status = ReservationStatus.ACTIVE; // ACTIVE, CANCELLED, COMPLETED
+
+    @Builder.Default
+    @CreatedDate
+    private Instant createdAt = Instant.now();
+    @Builder.Default
+    @LastModifiedDate
+    private Instant lastModifiedAt = Instant.now();
+
+    public enum ReservationStatus {
+        ACTIVE, CANCELLED, COMPLETED
+    }
+}

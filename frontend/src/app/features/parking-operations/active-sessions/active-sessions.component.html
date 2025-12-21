@@ -1,0 +1,52 @@
+<div class="space-y-6">
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Sessões Ativas</h1>
+            <p class="mt-1 text-sm text-gray-600">Veículos estacionados no momento</p>
+        </div>
+        <button (click)="loadSessions()" class="text-primary-600 hover:text-primary-800">
+            Atualizar
+        </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="flex justify-center p-8">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+    </div>
+
+    <!-- Grid -->
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div *ngFor="let session of sessions"
+            class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-primary-500 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900">{{ session.vehicle.licensePlate }}</h3>
+                    <p class="text-sm text-gray-600">{{ session.vehicle.model }}</p>
+                </div>
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                    {{ session.spot.code }}
+                </span>
+            </div>
+
+            <div class="space-y-2 mb-4">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Entrada:</span>
+                    <span class="font-medium">{{ session.entryTime | date:'shortTime' }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-500">Tarifa:</span>
+                    <span class="font-medium">R$ {{ session.hourlyRate }}/h</span>
+                </div>
+            </div>
+
+            <button (click)="processExit(session.id!)"
+                class="w-full py-2 bg-primary-50 text-primary-700 hover:bg-primary-100 rounded-lg font-medium transition-colors">
+                Registrar Saída
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && sessions.length === 0" class="text-center py-12 text-gray-500">
+        Nenhuma sessão ativa no momento.
+    </div>
+</div>

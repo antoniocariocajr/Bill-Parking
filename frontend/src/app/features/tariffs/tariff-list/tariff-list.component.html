@@ -1,0 +1,193 @@
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Tarifas</h1>
+            <p class="mt-1 text-sm text-gray-600">Gerencie as tarifas do estacionamento</p>
+        </div>
+        <button (click)="openModal()"
+            class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 transition-colors">
+            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Nova Tarifa
+        </button>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <svg class="animate-spin h-12 w-12 text-primary-600" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+            </path>
+        </svg>
+    </div>
+
+    <!-- Tariffs Table -->
+    <div *ngIf="!loading" class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo de
+                        Veículo</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Diária
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mensal
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Período
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                <tr *ngFor="let tariff of tariffs" class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="text-sm font-medium text-gray-900">{{ tariff.vehicleType }}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ {{ tariff.hourlyRate.toFixed(2) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ {{ tariff.dailyRate.toFixed(2) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        R$ {{ tariff.monthlyRate.toFixed(2) }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        {{ tariff.validFrom | date:'dd/MM/yyyy' }} - {{ tariff.validUntil | date:'dd/MM/yyyy' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 py-1 text-xs font-semibold rounded-full"
+                            [class.bg-success-100]="tariff.active" [class.text-success-800]="tariff.active"
+                            [class.bg-gray-100]="!tariff.active" [class.text-gray-800]="!tariff.active">
+                            {{ tariff.active ? 'Ativa' : 'Inativa' }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                        <button (click)="toggleActive(tariff)"
+                            class="text-primary-600 hover:text-primary-900 transition-colors">
+                            {{ tariff.active ? 'Desativar' : 'Ativar' }}
+                        </button>
+                        <button (click)="openModal(tariff)"
+                            class="text-primary-600 hover:text-primary-900 transition-colors">
+                            Editar
+                        </button>
+                        <button (click)="deleteTariff(tariff.id!)"
+                            class="text-danger-600 hover:text-danger-900 transition-colors">
+                            Excluir
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && tariffs.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+            </path>
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">Nenhuma tarifa encontrada</h3>
+        <p class="mt-1 text-sm text-gray-500">Comece criando uma nova tarifa.</p>
+    </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50"
+    (click)="closeModal()">
+    <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-lg bg-white"
+        (click)="$event.stopPropagation()">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-gray-900">
+                {{ isEditing ? 'Editar Tarifa' : 'Nova Tarifa' }}
+            </h3>
+            <button (click)="closeModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+
+        <form [formGroup]="tariffForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            <!-- Vehicle Type -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Veículo</label>
+                <select formControlName="vehicleType"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                    <option [value]="VehicleType.CAR">Carro</option>
+                    <option [value]="VehicleType.MOTORCYCLE">Moto</option>
+                    <option [value]="VehicleType.TRUCK">Caminhão</option>
+                </select>
+            </div>
+
+            <!-- Hourly Rate -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Valor por Hora (R$)</label>
+                <input type="number" formControlName="hourlyRate" step="0.01" min="0"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    [class.border-danger-500]="tariffForm.get('hourlyRate')?.invalid && tariffForm.get('hourlyRate')?.touched">
+            </div>
+
+            <!-- Daily Rate -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Valor Diária (R$)</label>
+                <input type="number" formControlName="dailyRate" step="0.01" min="0"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    [class.border-danger-500]="tariffForm.get('dailyRate')?.invalid && tariffForm.get('dailyRate')?.touched">
+            </div>
+
+            <!-- Monthly Rate -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Valor Mensal (R$)</label>
+                <input type="number" formControlName="monthlyRate" step="0.01" min="0"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    [class.border-danger-500]="tariffForm.get('monthlyRate')?.invalid && tariffForm.get('monthlyRate')?.touched">
+            </div>
+
+            <!-- Valid From -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Válido De</label>
+                <input type="date" formControlName="validFrom"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    [class.border-danger-500]="tariffForm.get('validFrom')?.invalid && tariffForm.get('validFrom')?.touched">
+            </div>
+
+            <!-- Valid Until -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Válido Até (Opcional)</label>
+                <input type="date" formControlName="validUntil"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+            </div>
+
+            <!-- Active -->
+            <div class="flex items-center">
+                <input type="checkbox" formControlName="active" id="active"
+                    class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                <label for="active" class="ml-2 block text-sm text-gray-700">
+                    Tarifa ativa
+                </label>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex space-x-3 pt-4">
+                <button type="button" (click)="closeModal()"
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </button>
+                <button type="submit" [disabled]="tariffForm.invalid"
+                    class="flex-1 px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                    {{ isEditing ? 'Atualizar' : 'Criar' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

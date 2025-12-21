@@ -1,0 +1,46 @@
+<aside class="w-64 bg-white shadow-lg h-full overflow-y-auto">
+    <nav class="mt-5 px-2 space-y-1">
+        <ng-container *ngFor="let item of menuItems">
+            <div *ngIf="shouldShowItem(item)">
+                <!-- Menu item without children -->
+                <a *ngIf="!item.children" [routerLink]="item.route"
+                    routerLinkActive="bg-primary-50 text-primary-700 border-l-4 border-primary-700"
+                    class="group flex items-center px-3 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon">
+                        </path>
+                    </svg>
+                    {{ item.label }}
+                </a>
+
+                <!-- Menu item with children -->
+                <div *ngIf="item.children">
+                    <button (click)="toggleExpand(item.label)"
+                        class="w-full group flex items-center justify-between px-3 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="flex items-center">
+                            <svg class="mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    [attr.d]="item.icon"></path>
+                            </svg>
+                            {{ item.label }}
+                        </div>
+                        <svg class="h-5 w-5 transition-transform" [class.rotate-90]="isExpanded(item.label)" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <!-- Submenu -->
+                    <div *ngIf="isExpanded(item.label)" class="ml-6 mt-1 space-y-1">
+                        <a *ngFor="let child of item.children" [routerLink]="child.route"
+                            routerLinkActive="bg-primary-50 text-primary-700 font-semibold"
+                            class="block px-3 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">
+                            {{ child.label }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </nav>
+</aside>
