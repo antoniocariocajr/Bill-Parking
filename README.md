@@ -1,195 +1,125 @@
-# 🚗 Parking Control System
+# 🚗 Bill Parking - Sistema Inteligente de Gestão de Estacionamentos
 
-> **"Gerenciamento de estacionamento inteligente, seguro e eficiente."**
+> **"Eficiência, segurança e controle total para o seu estacionamento."**
 
-Bem-vindo ao **Parking Control System**, uma solução robusta e moderna desenvolvida para simplificar a administração de estacionamentos. Este projeto combina tecnologias de ponta para oferecer controle total sobre vagas, sessões de estacionamento, pagamentos e clientes.
+Bem-vindo ao **Bill Parking**, uma solução Full-Stack robusta e moderna projetada para transformar a administração de estacionamentos. Combinando o poder do Java Spring Boot no backend com a interatividade do Angular no frontend, este sistema oferece uma experiência completa para gestores e operadores.
 
 ---
 
 ## 🌟 Destaques do Projeto
 
-Este não é apenas um CRUD. É um sistema completo projetado com escalabilidade e segurança em mente.
-
-* **🔐 Segurança de Nível Bancário**: Autenticação via JWT (JSON Web Tokens) com chaves RSA assimétricas.
-* **⚡ Performance**: Construído sobre o Spring Boot 3.5.8 e Java 21 para máxima eficiência.
-* **💾 Dados Flexíveis**: Persistência NoSQL com MongoDB, ideal para dados dinâmicos de sessões e logs.
-* **📄 Documentação Viva**: API totalmente documentada com Swagger UI (OpenAPI).
+* **🖥️ Frontend Moderno**: Interface reativa e elegante construída com **Angular 21** e estilizada com **TailwindCSS**.
+* **🔙 Backend Poderoso**: API RESTful segura e escalável com **Spring Boot 3.5.8** e **Java 21**.
+* **💾 Dados Flexíveis**: Persistência ágil com **MongoDB**, ideal para logs de alto volume e estruturas de dados dinâmicas.
+* **🔐 Segurança Avançada**: Autenticação robusta via **JWT (JSON Web Tokens)** e OAuth2.
+* **📊 Relatórios Inteligentes**: Insights detalhados com relatórios diários e mensais.
 
 ---
 
 ## 🛠️ Tech Stack
 
-As ferramentas que dão vida ao projeto:
+### Backend
 
-| Categoria | Tecnologia | Versão |
-| :--- | :--- | :--- |
-| **Linguagem** | ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat&logo=openjdk&logoColor=white) | 21 |
-| **Framework** | ![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white) | 3.5.8 |
-| **Banco de Dados** | ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white) | Latest |
-| **Segurança** | ![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=flat&logo=spring-security&logoColor=white) | OAuth2 / JWT |
-| **Ferramentas** | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white) ![Maven](https://img.shields.io/badge/Maven-C71A36?style=flat&logo=apache-maven&logoColor=white) | - |
+| Tecnologia | Descrição |
+| :--- | :--- |
+| ![Java](https://img.shields.io/badge/Java-21-ED8B00?style=flat&logo=openjdk&logoColor=white) | Linguagem base, versão LTS moderna. |
+| ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5.8-6DB33F?style=flat&logo=spring-boot&logoColor=white) | Framework principal para APIs e Injeção de Dependência. |
+| ![MongoDB](https://img.shields.io/badge/MongoDB-Latest-47A248?style=flat&logo=mongodb&logoColor=white) | Banco de dados NoSQL orientado a documentos. |
+| ![Spring Security](https://img.shields.io/badge/Safe-Security-6DB33F?style=flat&logo=spring-security&logoColor=white) | Gestão de autenticação e autorização. |
+| ![Swagger](https://img.shields.io/badge/API-Swagger-85EA2D?style=flat&logo=swagger&logoColor=black) | Documentação interativa da API. |
+
+### Frontend
+
+| Tecnologia | Descrição |
+| :--- | :--- |
+| ![Angular](https://img.shields.io/badge/Angular-21-DD0031?style=flat&logo=angular&logoColor=white) | Framework SPA para interfaces dinâmicas. |
+| ![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat&logo=tailwind-css&logoColor=white) | Framework CSS utilitário para design rápido e responsivo. |
+| ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat&logo=typescript&logoColor=white) | Superset JavaScript tipado. |
 
 ---
 
 ## 🚀 Funcionalidades
 
-O sistema é dividido em módulos inteligentes:
+O sistema abrange todo o ciclo operacional de um estacionamento:
 
-### 🅿️ Gestão de Vagas (`ParkingSpot`)
+### 🎮 Painel de Controle (Dashboard)
 
-* Cadastro e monitoramento de vagas.
-* Status em tempo real (Ocupada/Livre).
+Visão geral do sistema com métricas chave e status atual.
 
-### ⏱️ Sessões de Estacionamento (`ParkingSession`)
+### 🅿️ Operações de Pátio
 
-* Controle de entrada e saída de veículos.
-* Cálculo automático de tempo de permanência.
+* **Registro de Entrada**: Cadastro rápido de veículos chegando.
+* **Sessões Ativas**: Monitoramento em tempo real de quem está estacionado.
+* **Saída e Pagamento**: Cálculo automático de tarifas e processamento de pagamentos na saída.
 
-### 💰 Pagamentos e Tarifas (`Payment` & `Tariff`)
+### 📋 Gestão de Cadastros (CRUDs)
 
-* Gestão de tarifas dinâmicas.
-* Processamento de pagamentos seguro.
+* **Clientes**: Base de dados de clientes recorrentes.
+* **Veículos**: Associação de veículos a clientes.
+* **Vagas (`ParkingSpots`)**: Mapeamento e status das vagas físicas.
+* **Operadores**: Gestão de funcionários e permissões.
 
-### 👥 Gestão de Usuários e Clientes
+### 💸 Financeiro e Configurações
 
-* **Admin/User**: Controle de acesso baseado em roles.
-* **Clientes**: Cadastro completo de clientes e seus veículos.
+* **Tarifas (`Tariffs`)**: Configuração flexível de preços (hora, diária, mensal).
+* **Reservas**: Agendamento antecipado de vagas.
+* **Pagamentos**: Histórico completo de transações.
 
----
+### 📈 Relatórios
 
-## 🏗️ Arquitetura
-
-O projeto segue uma arquitetura em camadas limpa e organizada:
-
-1. **Controllers**: Pontos de entrada RESTful.
-2. **Services**: Regras de negócio complexas.
-3. **Repositories**: Abstração de acesso a dados (MongoDB).
-4. **Security**: Filtros de segurança e validação de tokens.
+* **Relatório Diário**: Fechamento de caixa e movimento do dia.
+* **Relatório Mensal**: Análise macro de desempenho.
 
 ---
 
-## 🗄️ Database Model
+## 🏁 Como Executar
 
-Abaixo está o diagrama Entidade-Relacionamento (ER) do sistema:
-
-```mermaid
-erDiagram
-    User {
-        String id PK
-        String email
-        String name
-        String password
-        Role role
-        boolean enabled
-    }
-    Client {
-        String id PK
-        String name
-        String cpf
-        String email
-        String phone
-    }
-    Vehicle {
-        String id PK
-        String licensePlate
-        String brand
-        String model
-        String color
-        VehicleType type
-    }
-    ParkingSpot {
-        String id PK
-        String code
-        VehicleType type
-        SpotStatus status
-        boolean covered
-    }
-    Tariff {
-        String id PK
-        VehicleType vehicleType
-        BigDecimal hourlyRate
-        BigDecimal dailyRate
-        BigDecimal monthlyRate
-        Instant validFrom
-        Instant validUntil
-        boolean active
-    }
-    ParkingSession {
-        String id PK
-        Instant entryTime
-        Instant exitTime
-        SessionStatus status
-        BigDecimal hourlyRate
-        BigDecimal totalAmount
-    }
-    Payment {
-        String id PK
-        BigDecimal amount
-        PaymentMethod method
-        PaymentStatus status
-        Instant paidAt
-        String transactionId
-    }
-    Reservation {
-        String id PK
-        Instant reservedFrom
-        Instant reservedUntil
-        ReservationStatus status
-    }
-
-    Client ||--|{ Vehicle : owns
-    Vehicle }|--|| Client : owned_by
-    ParkingSession }|--|| Vehicle : involves
-    ParkingSession }|--|| ParkingSpot : uses
-    ParkingSession }|--|| User : managed_by
-    Payment }|--|| ParkingSession : pays_for
-    Reservation }|--|| Client : made_by
-    Reservation }|--|| ParkingSpot : reserves
-```
-
----
-
-## 🏁 Getting Started
-
-Siga os passos abaixo para rodar o projeto em sua máquina local.
+Siga os passos abaixo para rodar o projeto completo em sua máquina.
 
 ### Pré-requisitos
 
 * Java 21 JDK
+* Node.js (v18+) e NPM
+* MongoDB (Rodando na porta padrão 27017)
 * Maven
-* MongoDB (Rodando localmente ou via Docker)
 
-### Instalação
+### 1. Backend (API)
 
-1. **Clone o repositório**
+```bash
+# Navegue até a pasta do backend
+cd backend
 
-    ```bash
-    git clone https://github.com/seu-usuario/parking-control.git
-    cd parking-control
-    ```
+# Instale as dependências e rode o projeto
+mvn spring-boot:run
+```
 
-2. **Configure as Chaves JWT**
-    O sistema espera chaves RSA para assinar os tokens. Gere-as (ou use as de exemplo para dev) e configure no `application.properties` ou variáveis de ambiente.
+*A API estará disponível em `http://localhost:8080`*
+*Documentação Swagger: `http://localhost:8080/swagger-ui.html`*
 
-3. **Compile e Rode**
+### 2. Frontend (Aplicação Web)
 
-    ```bash
-    mvn spring-boot:run
-    ```
+```bash
+# Navegue até a pasta do frontend
+cd frontend
 
-4. **Acesse a Documentação da API**
-    Abra seu navegador em:
-    `http://localhost:8080/swagger-ui.html`
+# Instale as dependências
+npm install
+
+# Inicie o servidor de desenvolvimento
+npm start
+# ou
+ng serve
+```
+
+*A aplicação abrirá em `http://localhost:4200`*
 
 ---
 
-## 🧪 Testes
+## 🔒 Acesso Padrão
 
-Para garantir a qualidade, execute a suíte de testes:
+Caso haja usuários pré-configurados (Seed), utilize:
 
-```bash
-mvn test
-```
+* **Admin**: `admin@parking.com` / `admin123` (Exemplo)
 
 ---
 
@@ -197,6 +127,12 @@ mvn test
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar pull requests.
 
+1. Faça um Fork do projeto
+2. Crie sua Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a Branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
 ---
 
-Feito com ☕ e código por Antonio
+Feito com ☕ e código por **Antonio**.
