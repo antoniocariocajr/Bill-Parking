@@ -36,8 +36,8 @@ A implementação dessas ferramentas no Bill Parking trará uma redução signif
 
 ## Anexos
 
-[lista de anexos, como manuais, documentos, planilhas, entre outros]
+[\[projetos AWS](https://github.com/antoniocariocajr/Bill-Parking/)
 
-Assinatura do ResponsÃ¡vel pelo Projeto:
+Assinatura do Responsável pelo Projeto:
 
 Antonio Carioca Junior
